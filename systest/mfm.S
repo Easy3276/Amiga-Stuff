@@ -1,10 +1,10 @@
 
         .section .text
 
-        .global mfm_decode_track, mfm_encode_track
+        .global _mfm_decode_track, _mfm_encode_track
         
         /* nr_secs = mfm_decode_track(mfmbuf, headers, data, mfm_bytes) */
-mfm_decode_track:
+_mfm_decode_track:
         movem.l d0-d7/a0-a3,-(sp)
         lea     13*4(sp),a3       /* args: */
         move.l  (a3)+,a0          /* mfmbuf */
@@ -56,7 +56,7 @@ decode_mfm_long:
         rts
 
         /* mfm_encode_track(mfmbuf, tracknr, mfm_bytes) */
-mfm_encode_track:
+_mfm_encode_track:
         movem.l d0-d7/a0-a1,-(sp)
         lea     11*4(sp),a1       /* args: */
         move.l  (a1)+,a0          /* mfmbuf */

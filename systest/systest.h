@@ -185,6 +185,6 @@ extern char build_time[];
 #define assert(_p) do { if (!(_p)) __assert_fail(); } while (0)
 #define __assert_fail() asm volatile (          \
     "illegal        \n"                         \
-    "move.w %0,%%d0 \n"                         \
+    "move.l %0,%%d0 \n"                         \
     "move.w %1,%%d0 \n"                         \
     : : "i" (__FILE__), "i" (__LINE__) )

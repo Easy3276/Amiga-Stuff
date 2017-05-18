@@ -272,7 +272,7 @@ static void test_memory_slots(uint32_t slots, struct char_row *r)
             /* 1st 256kB: Test unused heap. 
              * 2nd 256kB: Test all. */
             tm_args.start = (uint32_t)allocmem(0);
-            tm_args.end = (uint32_t)HEAP_END;
+            tm_args.end = (uint32_t)_HEAP_END;
             tm_args.r = *r;
             call_cancellable_test(test_memory_range, &tm_args);
             if (do_exit)
@@ -610,7 +610,7 @@ static void kickstart_test_one_region(struct char_row *r, unsigned int i)
 
         /* Bottom 256kB: Test unused heap. */
         tm_args.start = max_t(uint32_t, (uint32_t)allocmem(0), a);
-        tm_args.end = min_t(uint32_t, (uint32_t)HEAP_END-1, b) + 1;
+        tm_args.end = min_t(uint32_t, (uint32_t)_HEAP_END-1, b) + 1;
         tm_args.r = *r;
         if (tm_args.start < tm_args.end)
             call_cancellable_test(test_memory_range, &tm_args);
@@ -731,7 +731,7 @@ static void kickstart_memory_test(struct char_row *r)
 
         /* Bottom 256kB: Test unused heap. */
         tm_args.start = (uint32_t)allocmem(0);
-        tm_args.end = (uint32_t)HEAP_END;
+        tm_args.end = (uint32_t)_HEAP_END;
         tm_args.r = *r;
         call_cancellable_test(test_memory_range, &tm_args);
 

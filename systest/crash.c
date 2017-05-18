@@ -20,22 +20,22 @@ static uint16_t copper[] = {
 
 void double_crash(void);
 asm (
-"double_crash:                      \n"
+"_double_crash:                     \n"
 "    move.w #0x700,0xdff180         \n"
-"    jra    double_crash            \n"
+"    jra    _double_crash           \n"
 );
 
 /* Common entry point for unexpected exceptions. */
 void common(void);
 asm (
-"common:                            \n"
+"_common:                           \n"
 "    ori.w   #0x700,%sr             \n"
 "    movem.l %d0-%d7/%a0-%a6,-(%sp) \n"
 "    move.l  %usp,%a0               \n"
 "    move.l  %a0,-(%sp)             \n"
 "    move.l  %sp,%a0                \n"
 "    move.l  %a0,-(%sp)             \n"
-"    jbsr    crash                  \n"
+"    jbsr    _crash                 \n"
 );
 
 /* Per-vector entry points, 2 words per vector: BSR.w <target>.

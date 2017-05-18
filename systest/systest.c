@@ -42,13 +42,13 @@
 static void c_##name(void) attribute_used;                                 \
 void name(void);                                                           \
 asm (                                                                      \
-#name":                             \n"                                    \
+"_"#name":                          \n"                                    \
 "    movem.l %d0-%d1/%a0-%a1,-(%sp) \n" /* Save a c_exception_frame */     \
 "    move.b  16(%sp),%d0            \n" /* D0 = SR[15:8] */                \
 "    and.b   #7,%d0                 \n" /* D0 = SR.IRQ_MASK */             \
 "    jne     1f                     \n" /* SR.IRQ_MASK == 0? */            \
-"    move.l  %sp,user_frame         \n" /* If so ours is the user_frame */ \
-"1:  jbsr    c_"#name"              \n"                                    \
+"    move.l  %sp,_user_frame        \n" /* If so ours is the user_frame */ \
+"1:  jbsr    _c_"#name"             \n"                                    \
 "    movem.l (%sp)+,%d0-%d1/%a0-%a1 \n"                                    \
 "    rte                            \n"                                    \
 )
@@ -220,7 +220,7 @@ void *allocmem(unsigned int sz)
 {
     void *p = alloc_p;
     alloc_p = (uint8_t *)alloc_p + sz;
-    assert((char *)alloc_p < HEAP_END);
+    assert((char *)alloc_p < _HEAP_END);
     return p;
 }
 
@@ -965,6 +965,8 @@ void cstart(void)
     uint16_t i, j;
     char *p;
 
+    for (;;) cust->color[0] = 0xf0;
+
     /* Clear BSS. */
     memset(_sbss, 0, _ebss-_sbss);
 
@@ -1055,6 +1057,6 @@ void cstart(void)
 
 asm (
 "    .data                          \n"
-"packfont: .incbin \"../base/font.raw\"\n"
+"_packfont: .incbin \"../base/font.raw\"\n"
 "    .text                          \n"
 );

@@ -98,10 +98,10 @@ uint32_t div32(uint32_t dividend, uint16_t divisor);
 /* Text/data/BSS address ranges. */
 extern char _start[], _end[];
 extern char _stext[], _etext[];
-extern char _sdat[], _edat[], _ldat[];
+extern char _sdat[], _edat[];
 extern char _sbss[], _ebss[];
 
-extern char HEAP_END[];
+extern char _HEAP_END[];
 
 /*
  * Local variables:

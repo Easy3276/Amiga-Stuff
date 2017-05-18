@@ -10,8 +10,8 @@
  */
 
 asm (
-    ".global call_cancellable_fn\n"
-    "call_cancellable_fn:\n"
+    ".global _call_cancellable_fn      \n"
+    "_call_cancellable_fn:             \n"
     "    movem.l %d2-%d7/%a2-%a6,-(%sp)\n" /* (SP += 44) */
     "    move.l  44+4(%sp),%a0         \n" /* A0 = c */
     "    move.l  %sp,(%a0)             \n" /* c->sp = SP */
@@ -23,7 +23,7 @@ asm (
     "    move.l  #0,(%a0)              \n" /* c->sp = NULL */
     "1:  movem.l (%sp)+,%d2-%d7/%a2-%a6\n" /* (SP -= 44) */
     "    rts                           \n"
-    "do_cancel:                        \n"
+    "_do_cancel:                       \n"
     "    move.l  %d0,%sp               \n" /* SP = c->sp as saved above */
     "    moveq   #-1,%d0               \n" /* D0 = return code = -1 */
     "    jra     1b                    \n"

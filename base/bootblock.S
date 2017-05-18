@@ -9,16 +9,16 @@
  * See the file COPYING for more details, or visit <http://unlicense.org>.
  */
 
-        .section .text.init
-        .global start
-start:
+//        .section .text.init
+        .global _start
+_start:
         /* Standard DOS bootblock header */
         dc.b    'D','O','S',0   /* signature */
         dc.l    0               /* checksum (filled later) */
         dc.l    880             /* dummy root block index */
 
         /* Compute load size, rounded up to sector alignment */
-        move.l  #_edat-start,d0
+//        move.l  #__edat-_start,d0
         add.l   #511,d0
         and.w   #~511,d0
         move.l  d0,-(sp)
@@ -53,7 +53,7 @@ start:
 
         /* Clean up our stack and jump at what we just loaded */
 .done:  movem.l (sp)+,a0-a2
-        jmp     .begin-start(a0)
+        jmp     .begin-_start(a0)
 
 .begin:
 #include "init.S"

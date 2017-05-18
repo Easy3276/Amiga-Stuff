@@ -1,39 +1,35 @@
-ENTRY(start)
+ENTRY(_start)
 
 SECTIONS
 {
-  SUPER_SP = 0x40000;
-  USER_SP = 0x3fc00;
-  HEAP_END = 0x3f000;
+  __SUPER_SP = 0x40000;
+  __USER_SP = 0x3fc00;
+  __HEAP_END = 0x3f000;
   . = 0x400;
 
   .text : {
-    _start = .;
-    _stext = .;
-    *(.text.init)
+    __start = .;
+    __stext = .;
     *(.text*)
-    *(.rodata*)
     . = ALIGN(4);
-    _etext = .;
+    __etext = .;
   }
 
   .data : {
     . = ALIGN(4);
-    _sdat = .;
-    *(.data)
+    __sdat = .;
     *(.data*)
-    . = ALIGN(4);
-    _edat = .;
+   . = ALIGN(4);
+    __edat = .;
   }
 
   .bss : {
     . = ALIGN(4);
-    _sbss = .;
-    *(.bss)
+    __sbss = .;
     *(.bss*)
     . = ALIGN(4);
-    _ebss = .;
-    _end = .;
+    __ebss = .;
+    __end = .;
   }
 
   /DISCARD/ : {

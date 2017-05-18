@@ -17,10 +17,10 @@
         /* Walk Exec memory list to find all memory regions. */
         move.l  4,a6
         move.l  0x142(a6),a0 /* ExecBase->MemList.lh_Head */
-        lea.l   start(pc),a1
+        lea.l   _start(pc),a1
         move.l  a1,a2
-        add.l   #mem_region-start,a1
-        add.l   #nr_mem_regions-start,a2
+//        add.l   #_mem_region-_start,a1
+//        add.l   #_nr_mem_regions-_start,a2
         move.w  (a2),d0      /* d0.w = max # regions */
 .mem:   /* First check mh_Attributes specifies some valid flags: at least one
          * of MEMF_PUBLIC, MEMF_CHIP, or MEMF_FAST. This fixes memory detection
@@ -91,17 +91,17 @@
         move.l  a0,(0x10).w
         dc.l    0x4e7b0801      /* movec.l d0,vbr  (VBR  = 0) */
         dc.l    0x4e7b0002      /* movec.l d0,cacr (CACR = 0) */
-.skip:  lea.l   (SUPER_SP).l,sp /* SSP */
-        lea.l   (USER_SP).l,a0
+.skip:  lea.l   (__SUPER_SP).l,sp /* SSP */
+        lea.l   (__USER_SP).l,a0
         move.l  a0,usp          /* USP */
 
         /* Check whether current location and final destination overlap.
          * Since the final destination is as low as possible in memory, this
          * can only occur by the end of the destination running into the start
          * of the current location. */
-        lea.l   start(pc),a0
+        lea.l   _start(pc),a0
         move.l  a0,d0           /* d0 = current location */
-        move.l  #_end,d1        /* d1 = end of destination */
+        move.l  #__edat,d1      /* d1 = end of destination */
         cmp.l   d1,d0           /* Does the destination overlap with us? */
         jcc     1f
         /* It does overlap so make a temp. copy immediately beyond us.
@@ -110,17 +110,17 @@
          * in memory for this to be a problem we would not be overlapping
          * with the final destination in the first place. */
         move.l  a0,d1
-        add.l   #_end-start,d1  /* d1 = temp. location (current end loc.) */
+//        add.l   #__edat-_start,d1 /* d1 = temp. location (current end loc.) */
         jbsr    copy
         move.l  d1,a0           /* a0 = temp. location */
-        jmp     1f-start(a0)
+        jmp     1f-_start(a0)
 1:      /* Main copy to final relocation point */
         move.l  #main,-(sp)     /* jump to final destination after the copy */
-        move.l  #start,d1       /* d1 = destination */
+        move.l  #_start,d1      /* d1 = destination */
 
-copy:   lea.l   start(pc),a0    /* a0 = current location */
+copy:   lea.l   _start(pc),a0   /* a0 = current location */
         move.l  d1,a1           /* a1 = destination */
-        move.l  #_end-start,d0
+//        move.l  #__edat-_start,d0
         lsr.l   #2,d0
 1:      move.l  (a0)+,(a1)+
         dbf     d0,1b
@@ -129,7 +129,7 @@ copy:   lea.l   start(pc),a0    /* a0 = current location */
 main:   move.w  #0x2000,sr      /* allow CPU interrupts now that we are */
                                 /* definitely executing clear of the stack */
 
-        jmp     (cstart).l
+        jmp     (_cstart).l
 
 getvbr: dc.l    0x4e7ac801      /* movec.l vbr,a4 */
         rte

@@ -32,8 +32,8 @@
 #define gfx_cop2     0x32
 
         .section .text.init
-        .global start
-start:
+        .global _start
+_start:
         move.l  4,a6
         /* Find our Process structure and determine how we were started. */
         sub.l   a1,a1
